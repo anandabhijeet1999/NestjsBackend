@@ -13,6 +13,7 @@ export function getTypeOrmConfig(): TypeOrmModuleOptions {
 
   // Prefer DATABASE_URL when available (e.g. Render / cloud environments)
   if (process.env.DATABASE_URL) {
+    console.log('[TypeORM] Using DATABASE_URL for connection');
     return {
       ...baseConfig,
       url: process.env.DATABASE_URL,
@@ -25,12 +26,19 @@ export function getTypeOrmConfig(): TypeOrmModuleOptions {
   }
 
   // Fallback to individual connection params (useful for local development)
+  console.log('[TypeORM] Using discrete DB env vars', {
+    host: process.env.DATABASE_HOST ?? 'localhost',
+    port: process.env.DATABASE_PORT ?? '5432',
+    database: process.env.DATABASE_NAME ?? 'energy_ingestion',
+    user: process.env.DATABASE_USER ?? 'postgres',
+  });
+
   return {
     ...baseConfig,
     host: process.env.DATABASE_HOST ?? 'localhost',
     port: parseInt(process.env.DATABASE_PORT ?? '5432', 10),
     username: process.env.DATABASE_USER ?? 'postgres',
-    password: process.env.DATABASE_PASSWORD ?? 'Abhijeet@1998',
+    password: process.env.DATABASE_PASSWORD ?? 'postgres',
     database: process.env.DATABASE_NAME ?? 'energy_ingestion',
   };
 }
