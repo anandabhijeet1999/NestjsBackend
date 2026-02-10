@@ -6,10 +6,10 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      DATABASE_HOST: db
+      DATABASE_HOST: localhost
       DATABASE_PORT: 5432
       DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
+      DATABASE_PASSWORD: Abhijeet@1998
       DATABASE_NAME: energy_ingestion
     depends_on:
       db:
@@ -19,7 +19,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: Abhijeet@1998
       POSTGRES_DB: energy_ingestion
     ports:
       - "5432:5432"
