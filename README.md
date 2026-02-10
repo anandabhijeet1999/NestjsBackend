@@ -10,7 +10,7 @@ docker-compose up -d
 # API: http://localhost:3000/v1
 
 # Or local (requires Node 20+ and PostgreSQL)
-cp .env.example .env
+cp .env
 npm install
 npm run start:dev
 ```
