@@ -11,9 +11,19 @@ export function getTypeOrmConfig(): TypeOrmModuleOptions {
     migrations: [__dirname + '/migrations/*{.ts,.js}'],
   };
 
+  // Production (e.g. Render): require DATABASE_URL — localhost is not valid there
+  if (isProduction && !process.env.DATABASE_URL) {
+    const host = process.env.DATABASE_HOST ?? 'localhost';
+    if (!host || host === 'localhost') {
+      throw new Error(
+        '[TypeORM] In production you must set DATABASE_URL. ' +
+          'On Render: add env var DATABASE_URL from your Postgres service (Dashboard → Postgres → Internal Connection String).',
+      );
+    }
+  }
+
   // Prefer DATABASE_URL when available (e.g. Render / cloud environments)
   if (process.env.DATABASE_URL) {
-    console.log('[TypeORM] Using DATABASE_URL for connection');
     return {
       ...baseConfig,
       url: process.env.DATABASE_URL,
@@ -25,14 +35,7 @@ export function getTypeOrmConfig(): TypeOrmModuleOptions {
     };
   }
 
-  // Fallback to individual connection params (useful for local development)
-  console.log('[TypeORM] Using discrete DB env vars', {
-    host: process.env.DATABASE_HOST ?? 'localhost',
-    port: process.env.DATABASE_PORT ?? '5432',
-    database: process.env.DATABASE_NAME ?? 'energy_ingestion',
-    user: process.env.DATABASE_USER ?? 'postgres',
-  });
-
+  // Fallback to individual connection params (local development or custom host)
   return {
     ...baseConfig,
     host: process.env.DATABASE_HOST ?? 'localhost',

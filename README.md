@@ -10,7 +10,7 @@ docker-compose up -d
 # API: http://localhost:3000/v1
 
 # Or local (requires Node 20+ and PostgreSQL)
-cp  .env
+cp .env.example .env
 npm install
 npm run start:dev
 ```
@@ -101,6 +101,9 @@ src/
 
 ## Environment
 
-See `.env`. Key variables: `DATABASE_*`, `PORT`.
+Copy `.env.example` to `.env` and set variables.
+
+- **Local**: `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME` (or `DATABASE_URL`), `PORT`, `NODE_ENV`.
+- **Render**: In production you **must** set `DATABASE_URL`. In the Render dashboard: create a Postgres service, then in your Web Service → Environment add `DATABASE_URL` with the **Internal Connection String** from the Postgres service. Also set `NODE_ENV=production`.
 
 
